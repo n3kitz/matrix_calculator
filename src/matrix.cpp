@@ -9,16 +9,19 @@ namespace matrix {
 namespace {
 /// @brief Проверка корректности матрицы.
 bool valid(Matrix m) {
-    if (!m.data || m.rows <= 0 || m.cols <= 0) return false;
+    if (!m.data || m.rows <= 0 || m.cols <= 0)
+        return false;
     for (int i = 0; i < m.rows; ++i)
-        if (!m.data[i]) return false;
+        if (!m.data[i])
+            return false;
     return true;
 }
 /// @brief Проверка матрицы с генерацией исключения.
 void require_valid(Matrix m) {
-    if (!valid(m)) throw std::invalid_argument("Invalid matrix");
+    if (!valid(m))
+        throw std::invalid_argument("Invalid matrix");
 }
-}
+} // namespace
 Matrix create_matrix(int rows, int cols) {
     if (rows <= 0 || cols <= 0)
         throw std::invalid_argument("Matrix dimensions must be positive integers");
@@ -27,7 +30,8 @@ Matrix create_matrix(int rows, int cols) {
         for (int i = 0; i < rows; ++i)
             m.data[i] = new double[cols]{};
     } catch (...) {
-        for (int i = 0; i < rows; ++i) delete[] m.data[i];
+        for (int i = 0; i < rows; ++i)
+            delete[] m.data[i];
         delete[] m.data;
         throw;
     }
@@ -35,13 +39,16 @@ Matrix create_matrix(int rows, int cols) {
 }
 
 void free_matrix(Matrix m) {
-    if (!m.data) return;
-    for (int i = 0; i < m.rows; ++i) delete[] m.data[i];
+    if (!m.data)
+        return;
+    for (int i = 0; i < m.rows; ++i)
+        delete[] m.data[i];
     delete[] m.data;
 }
 
 Matrix matrix_add(Matrix a, Matrix b) {
-    require_valid(a); require_valid(b);
+    require_valid(a);
+    require_valid(b);
     if (a.rows != b.rows || a.cols != b.cols)
         throw std::invalid_argument("Addition size mismatch");
     Matrix c = create_matrix(a.rows, a.cols);
@@ -52,7 +59,8 @@ Matrix matrix_add(Matrix a, Matrix b) {
 }
 
 Matrix matrix_multiply(Matrix a, Matrix b) {
-    require_valid(a); require_valid(b);
+    require_valid(a);
+    require_valid(b);
     if (a.cols != b.rows)
         throw std::invalid_argument("Multiplication size mismatch");
     Matrix c = create_matrix(a.rows, b.cols);
@@ -64,7 +72,10 @@ Matrix matrix_multiply(Matrix a, Matrix b) {
 }
 
 void print_matrix(Matrix m) {
-    if (!valid(m)) { std::cout << "[Empty matrix]\n"; return; }
+    if (!valid(m)) {
+        std::cout << "[Empty matrix]\n";
+        return;
+    }
     constexpr int max_rows = 10, max_cols = 8;
     const auto flags = std::cout.flags();
     const auto precision = std::cout.precision();
@@ -91,7 +102,8 @@ void print_matrix(Matrix m) {
 }
 
 Matrix matrix_from_array(double* data, int rows, int cols) {
-    if (!data) throw std::invalid_argument("Null array");
+    if (!data)
+        throw std::invalid_argument("Null array");
     Matrix m = create_matrix(rows, cols);
     for (int i = 0; i < rows; ++i)
         for (int j = 0; j < cols; ++j)
@@ -105,8 +117,8 @@ bool matrix_is_zero(Matrix m, double tolerance) {
         throw std::invalid_argument("Invalid tolerance");
     for (int i = 0; i < m.rows; ++i)
         for (int j = 0; j < m.cols; ++j)
-            if (!std::isfinite(m.data[i][j]) ||
-                std::abs(m.data[i][j]) > tolerance) return false;
+            if (!std::isfinite(m.data[i][j]) || std::abs(m.data[i][j]) > tolerance)
+                return false;
     return true;
 }
 
@@ -118,4 +130,4 @@ Matrix matrix_transpose(Matrix m) {
             result.data[j][i] = m.data[i][j];
     return result;
 }
-}
+} // namespace matrix

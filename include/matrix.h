@@ -10,8 +10,8 @@ namespace matrix {
  */
 struct Matrix {
     double** data; ///< Данные по строкам.
-    int rows; ///< Количество строк.
-    int cols; ///< Количество столбцов.
+    int rows;      ///< Количество строк.
+    int cols;      ///< Количество столбцов.
 };
 /** @brief Создание матрицы, заполненной нулями.
  * @param rows Число строк (>0).
@@ -74,4 +74,4 @@ bool matrix_is_zero(Matrix m, double tolerance);
  * @exception std::invalid_argument Невалидная матрица.
  */
 Matrix matrix_transpose(Matrix m);
-}
+} // namespace matrix
